@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos Pendientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Productos Pendientes</h1>
+
+        <form method="POST">
+            <input type="text" name="nombre" placeholder="Nombre del producto" required>
+            <button type="submit">Agregar Producto</button>
+        </form>
+
+        <h2>Productos</h2>
+        <ul>
+            {% for producto in productos %}
+                <li class="{{ 'completo' if producto.completo else '' }}">
+                    {{ producto.nombre }}
+                    {% if not producto.completo %}
+                        <form action="{{ url_for('completar', id=producto.id) }}" method="POST" style="display:inline;">
+                            <button type="submit">Marcar como Completo</button>
+                        </form>
+                    {% else %}
+                        <span>(Completado)</span>
+                    {% endif %}
+                    <form action="{{ url_for('eliminar', id=producto.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
